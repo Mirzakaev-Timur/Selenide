@@ -28,7 +28,7 @@ public class TestForm {
     }
 
     @Test
-    void checkForValidValues() {
+    void shouldToTestForm() {
         String planningDate = generateDate(7);
 
         $("[data-test-id='city'] input").val("Уфа");
@@ -39,6 +39,21 @@ public class TestForm {
         $("[data-test-id='phone'] .input__control").val("+79994447788");
         $("[data-test-id='agreement']").click();
         $(".button").click();
-        $(withText("Успешно!")).shouldBe(visible, Duration.ofSeconds(10));
-}
+        $(withText("Успешно!")).shouldBe(visible, Duration.ofSeconds(20));
+    }
+
+    @Test
+    void shouldBookingConfirmation () {
+        String planningDate = generateDate(3);
+
+        $("[data-test-id='city'] input").val("Уфа");
+        $("[class='menu-item__control']").click();
+        $("[data-test-id=date] input").doubleClick().sendKeys(Keys.BACK_SPACE);
+        $("[data-test-id=date] input").sendKeys(planningDate);
+        $("[data-test-id='name'] .input__control").val("Петров-Водкин Аркадий");
+        $("[data-test-id='phone'] .input__control").val("+79994447788");
+        $("[data-test-id='agreement']").click();
+        $(".button").click();
+        $("[class='notification__content']").shouldHave(text("Встреча успешно забронирована на " + planningDate), Duration.ofSeconds(15));
+    }
 }
